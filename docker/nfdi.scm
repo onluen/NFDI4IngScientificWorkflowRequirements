@@ -1,6 +1,7 @@
 (define-module (nfdi)
   #:use-module (gnu packages algebra)
   #:use-module (gnu packages autotools)
+  #:use-module (gnu packages base)
   #:use-module (gnu packages check)
   #:use-module (gnu packages cmake)
   #:use-module (gnu packages compression)
@@ -34,8 +35,11 @@
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system python)
   #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (srfi srfi-1)
-  )
+  #:use-module (srfi srfi-1))
+
+(define-public my-glibc-utf8-locales
+  (make-glibc-utf8-locales
+   glibc #:locales (list "en_US") #:name "my-glibc-utf8-locales"))
 
 (define-public gwl
   (package
