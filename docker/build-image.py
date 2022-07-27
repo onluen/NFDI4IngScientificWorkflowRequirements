@@ -119,7 +119,7 @@ build_guix_stage(
     ln -s /root/.guix-profile/etc/services /etc/services
 
     # Copy custom packages and authorize substitutes.
-    cp /data/nfdi.scm /packages
+    cp /data/docker/nfdi.scm /packages
     guix archive --authorize < /root/.guix-profile/share/guix/ci.guix.gnu.org.pub
     guix archive --authorize < /root/.guix-profile/share/guix/bordeaux.guix.gnu.org.pub
 
@@ -136,7 +136,7 @@ build_guix_stage(
     guix package -d
     guix gc
     '''),
-    create_options=(f'--volume={datadir / "docker"}:/data',),
+    create_options=(f'--volume={datadir}:/data',),
     commit_options=('-c', f'ENV {container_env}'),
 )
 
@@ -146,12 +146,10 @@ build_guix_stage(
     textwrap.dedent('''
     set -e
     guix package -i gwl
-    guix package -i paraview fenics-foo tectonic gmsh python python-meshio \
-        pkg-config python-pkgconfig openmpi
     guix gc
-    #env -C /data guix workflow run -p gwl/workflow.w
+    cd /data/simple_use_case
+    guix workflow run -p gwl/workflow.w
     '''),
-    create_options=(f'--volume={datadir / "docker"}:/data',),
-    commit=False,
+    create_options=(f'--volume={datadir}:/data',),
     commit_options=('-c', f'ENV {container_env}'),
 )

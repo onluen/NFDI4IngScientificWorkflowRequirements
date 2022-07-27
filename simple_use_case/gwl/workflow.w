@@ -16,13 +16,13 @@ process convert-msh-to-xdmf (with inputmesh)
   outputs
     . xdmf: (file (basename inputmesh ".msh") "_converted.xdmf")
     . h5: (file (basename inputmesh ".msh") "_converted.h5")
-  # { meshio-convert {{inputs}} {{outputs:xdmf}} }
+  # { meshio convert {{inputs}} {{outputs:xdmf}} }
 
 
 process run-dolfin (with xdmfmeshfile h5meshfile)
   synopsis "Run the poisson solver in dolfin"
   packages "python" "fenics-foo" "pkg-config" "python-pkgconfig" "openmpi"
-    . "openssh"
+    . "openssh" "gcc-toolchain"
   inputs
     . script: (file "source/poisson.py")
     . xdmf: (file xdmfmeshfile)
