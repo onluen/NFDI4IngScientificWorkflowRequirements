@@ -5,25 +5,29 @@ language extension (`gwl`) for GNU Guix (`guix`).
 
 `guix` and `docker` must be available in the hosting operating system.
 
-The build process requires both ~8 Gb RAM and disk space.
+The build process requires both ~8 Gb RAM and disk space, since `paraview` is
+not yet available in the upstream guix repository at the time of this writing.
 
 # Implementation notes
 
-`guix` is able to create docker images. Both 'pack' and 'system' images, but
-neither of them qualifies as is for use with the `gwl` in github actions. The
-main obstacle is the dependency of the `guix-daemon` on isolation features for
-its builds. These isolation features are not available in unprivileged `docker`
-containers.
+`guix` is able to create docker images. Both `guix pack` and `guix system`
+create images, but neither of them qualifies as is for use with the `gwl` in
+github actions. The main obstacle is the dependency of the `guix-daemon` on
+isolation features for its builds. These isolation features are not available in
+unprivileged `docker` containers.
 
-The `guix-daemon` inside the container is running with
-`--disable-deduplication`, otherwise it looks like a bug is hit during `docker
-commit` and the disk space baloons way above 20 Gb.
+That is the reason why a docker image is create manually from scratch. In
+`stage0` a base guix installation image is created from guix itself. `stage1`
+will configure the system and install a specific guix revision to guarantee
+reproducability. In `stage2` the `simple_use_case` workflow is prepared and all
+required packages are installed. The `stage2` image can be used in
+github actions.
 '''
 
 import os, pathlib, subprocess, textwrap
 
 
-datadir = pathlib.Path(__file__).parent.parent
+datadir = (pathlib.Path(__file__) / '../..').resolve()
 container_env = (
     'HOME=/root LANG=en_US.UTF-8 '
     'PATH=/root/.config/guix/current/bin:/root/.guix-profile/bin '
@@ -60,7 +64,6 @@ def build_guix_stage(
             'docker', 'container', 'create', '--privileged', *create_options,
             source_image,
             'guix-daemon', '--cores=4', '--build-users-group=guixbuild',
-            '--disable-deduplication',
         ),
         stdout=subprocess.PIPE, check=True,
     ).stdout.decode().strip()
@@ -119,7 +122,7 @@ build_guix_stage(
     ln -s /root/.guix-profile/etc/services /etc/services
 
     # Copy custom packages and authorize substitutes.
-    cp /data/docker/nfdi.scm /packages
+    cp /data/build-aux/gwl/sigwftools.scm /packages
     guix archive --authorize < /root/.guix-profile/share/guix/ci.guix.gnu.org.pub
     guix archive --authorize < /root/.guix-profile/share/guix/bordeaux.guix.gnu.org.pub
 
