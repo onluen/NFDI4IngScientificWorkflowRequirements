@@ -21,7 +21,7 @@ process convert-msh-to-xdmf (with inputmesh)
 
 process run-dolfin (with xdmfmeshfile h5meshfile)
   synopsis "Run the poisson solver in dolfin"
-  packages "python" "fenics-foo" "pkg-config" "python-pkgconfig" "openmpi"
+  packages "python" "fenics-nfdi" "pkg-config" "python-pkgconfig" "openmpi"
     . "openssh" "gcc-toolchain"
   inputs
     . script: (file "source/poisson.py")
