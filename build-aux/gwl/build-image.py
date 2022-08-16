@@ -29,7 +29,7 @@ import os, pathlib, subprocess, textwrap
 
 datadir = pathlib.Path(__file__).parent.parent.parent
 container_env = (
-    'HOME=/root LANG=en_US.UTF-8 '
+    'HOME=/root LANG=en_US.UTF-8 SSL_CERTS_DIR=/etc/ssl/certs '
     'PATH=/root/.config/guix/current/bin:/root/.guix-profile/bin '
     'GUIX_PACKAGE_PATH=/packages GUIX_LOCPATH=/root/.guix-profile/lib/locale '
     'GUIX_EXTENSIONS_PATH=/root/.guix-profile/share/guix/extensions'
