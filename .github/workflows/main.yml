@@ -138,3 +138,24 @@ jobs:
           path: ./simple_use_case/snakemake/paper.pdf
           retention-days: 1
           if-no-files-found: error
+
+  run-gwl:
+    runs-on: ubuntu-latest
+    container: ghcr.io/onluen/sigwftools-gwl:latest
+
+    steps:
+      - name: checkout-repository
+        uses: actions/checkout@v1
+
+      - name: run-workflow
+        run: |
+          cd $GITHUB_WORKSPACE/simple_use_case
+          guix workflow run gwl/workflow.w
+
+      - name: upload-paper-artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: paper
+          path: ./paper.pdf
+          retention-days: 1
+          if-no-files-found: error
