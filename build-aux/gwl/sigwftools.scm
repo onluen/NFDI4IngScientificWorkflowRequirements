@@ -1,4 +1,4 @@
-(define-module (nfdi)
+(define-module (sigwftools)
   #:use-module (gnu packages algebra)
   #:use-module (gnu packages autotools)
   #:use-module (gnu packages base)
@@ -88,9 +88,9 @@ environments.")
     (license (list license:gpl3+ license:agpl3+ license:silofl1.1))))
 
 
-(define-public fenics-foo
+(define-public fenics-nfdi
   (package/inherit fenics-dolfin
-    (name "fenics-foo")
+    (name "fenics-nfdi")
     (build-system python-build-system)
     (inputs
      `(("pybind11" ,pybind11)

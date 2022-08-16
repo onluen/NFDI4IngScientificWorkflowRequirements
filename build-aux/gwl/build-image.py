@@ -27,7 +27,7 @@ github actions.
 import os, pathlib, subprocess, textwrap
 
 
-datadir = (pathlib.Path(__file__) / '../..').resolve()
+datadir = pathlib.Path(__file__).parent.parent.parent
 container_env = (
     'HOME=/root LANG=en_US.UTF-8 '
     'PATH=/root/.config/guix/current/bin:/root/.guix-profile/bin '
@@ -45,7 +45,7 @@ def build_guix_stage0(target_image, import_options=()):
             'my-glibc-utf8-locales', 'coreutils', 'bash',
             'net-base', 'nss-certs', 'guix',
         ),
-        env={**os.environ, 'GUIX_PACKAGE_PATH': datadir / 'docker'},
+        env={**os.environ, 'GUIX_PACKAGE_PATH': datadir / 'build-aux/gwl'},
         stdout=subprocess.PIPE, check=True,
     ).stdout.decode().strip())
 
@@ -148,7 +148,7 @@ build_guix_stage(
     'sigwftools-stage1', 'sigwftools-stage2',
     textwrap.dedent('''
     set -e
-    guix package -i gwl
+    guix package -i git grep gwl
     guix gc
     cd /data/simple_use_case
     guix workflow run -p gwl/workflow.w
