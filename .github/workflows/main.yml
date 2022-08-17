@@ -158,5 +158,3 @@ jobs:
         with:
           name: paper
           path: ./simple_use_case/paper.pdf
-          retention-days: 1
-          if-no-files-found: error
