@@ -149,11 +149,14 @@ jobs:
 
       - name: run-workflow
         run: |
-          cd simple_use_case
+          env
+          guix-daemon > guix-daemon.log 2>&1 &
+          pwd
+          cd $GITHUB_WORKSPACE/simple_use_case
           guix workflow run gwl/workflow.w
 
       - name: upload-paper-artifact
         uses: actions/upload-artifact@v1
         with:
           name: paper
-          path: ./simple_use_case/paper.pdf
+          path: simple_use_case/paper.pdf
