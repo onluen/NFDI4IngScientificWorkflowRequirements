@@ -149,6 +149,7 @@ jobs:
 
       - name: run-workflow
         run: |
+          guix-daemon > guix-daemon.log &
           cd $GITHUB_WORKSPACE/simple_use_case
           guix workflow run gwl/workflow.w
 
@@ -156,6 +157,6 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: paper
-          path: ./paper.pdf
+          path: ./simple_use_case/paper.pdf
           retention-days: 1
           if-no-files-found: error
