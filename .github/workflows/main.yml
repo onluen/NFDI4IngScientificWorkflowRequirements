@@ -149,10 +149,10 @@ jobs:
 
       - name: run-workflow
         run: |
-          env
+          # Start the guix-daemon in the background, which will is queried for
+          # the workflows software environment.
           guix-daemon > guix-daemon.log 2>&1 &
-          pwd
-          cd $GITHUB_WORKSPACE/simple_use_case
+          cd simple_use_case
           guix workflow run gwl/workflow.w
 
       - name: upload-paper-artifact
