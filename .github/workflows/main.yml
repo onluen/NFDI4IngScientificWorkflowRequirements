@@ -273,7 +273,7 @@ jobs:
     steps:
     - name: Install Guix
       id: install-guix
-      uses: PromyLOPh/guix-install-action@v1
+      uses: PromyLOPh/guix-install-action@v1.4
       with:
         channels: |-
           (list (channel
